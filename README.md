@@ -16,92 +16,86 @@
 
 ---
 
-## Why Margin?
+## 🗂️ What is Margin?
 
-Interesting things show up everywhere: a paper linked in a lecture, an essay someone mentioned, a book you mean to read. Margin gives them a home. Save a source, sort it into a collection, mark it for later or as read, and keep your own notes beside it.
+Margin is a small, account-free library for the links, papers, books, videos, and ideas you want to return to. Save a source, file it into a collection, keep a note beside it, and pick up where you left off.
 
-The library lives in your browser. There is no account, server, or API key to set up; export a JSON backup when you want a portable copy.
+The app runs in your browser. Your library stays in that browser's local storage and is not sent to the public repository or to a Margin server. There is no account or sync service; use the built-in JSON backup to move your library between devices.
 
-## At a glance
+### ✨ Highlights
 
-| Find your next read | Keep the useful thought |
-|:--:|:--:|
-| Search titles, links, descriptions, collections, and notes. Filter by source type, reading status, collection, or star. | Add a private annotation beside any saved source, keep reading momentum visible, and export or restore your whole library. |
+| Capability | What it does |
+|---|---|
+| Source library | Keep articles, papers, books, videos, podcasts, and other web sources together. |
+| Search and filters | Find sources by title, link, description, collection, or note; filter by type, status, collection, and star. |
+| Personal annotations | Write a private note beside a source; changes save locally as you type. |
+| Reading progress | Track unread and finished sources, notes, and starred items. |
+| Portable backups | Export a versioned JSON backup and restore it after validation. |
+| Focused interface | Use responsive card and list views, keyboard search (`Ctrl/⌘ K`), and reduced-motion support. |
 
-## Features
+---
 
-- **Capture in a moment** — save a link with a title, source kind, collection, and a short reason to return.
-- **A library that makes sense to you** — keep articles, papers, books, videos, podcasts, and other web sources together.
-- **Useful ways to browse** — search every source field, filter by kind, switch between recent and recently updated, and view starred or unread items.
-- **Notes beside the source** — open any card to write an annotation; it is saved locally as you type.
-- **Small signs of progress** — see how many sources are still unread, how many have notes, and what share you have finished.
-- **Portable by default** — download a JSON backup and restore it later, with schema and URL validation on import.
-- **Responsive, quiet interface** — warm paper tones, focused card layouts, keyboard search (`Ctrl/⌘ K`), and reduced-motion support.
-- **Privacy by design** — no tracking, analytics, authentication, backend, external content previews, or outgoing library requests.
+## ✨ Core Experience
 
-## Preview
+`Save a source  →  Organize it  →  Find it again  →  Add a note  →  Keep it on your device`
 
-The animated banner above is generated for this project; it is an illustration, not a screenshot. The application opens on a populated sample library so the main workflow is easy to explore. The sample links are examples; your own saved library is stored separately in your browser.
+The first visit includes four sample sources so the interface is easy to explore. They are examples only; they are not merged into an existing saved library. Clear the library to start fresh.
 
-## Technology
+---
+
+## 🧰 Tech Stack
 
 | Area | Choice | Purpose |
 |---|---|---|
-| Language | JavaScript (ES modules) | UI behavior and portable library logic |
-| Interface | HTML + CSS | Semantic, responsive, dependency-free interface |
-| Runtime | Node.js 20+ | Tiny local static server and built-in test runner |
-| Storage | Browser `localStorage` | Save the library locally without an account or server |
-| External APIs | None | Margin does not need network services to manage a library |
-| Tests | `node:test` | Cover URL safety, validation, filtering, sorting, and statistics |
-| CI | GitHub Actions | Run tests and JavaScript syntax checks on pushes and pull requests |
+| Language | JavaScript ES modules | Library logic and browser interactions |
+| Interface | HTML + CSS | Responsive, semantic, dependency-free UI |
+| Runtime | Node.js 20+ | Local static server and built-in test runner |
+| Storage | Browser `localStorage` | Keep each browser profile's library on that device |
+| External services | None | No account, API key, analytics, or backend required |
+| Tests | `node:test` | Cover URL safety, validation, search, filters, and statistics |
+| CI | GitHub Actions | Run tests and syntax checks on pushes and pull requests |
 
-## How it works
+---
 
-```mermaid
-flowchart LR
-    U[Reader] --> UI[HTML, CSS, JavaScript interface]
-    UI --> L[Library functions]
-    L --> V[Validate and filter sources]
-    V --> S[(Browser localStorage)]
-    S --> L
-    L --> UI
-    UI --> E[JSON export / import]
-```
-
-### Saving a source
+## 🧭 Project Structure
 
 ```mermaid
-sequenceDiagram
-    actor Reader
-    participant Form as Add source form
-    participant Logic as Library module
-    participant Store as Browser localStorage
-    Reader->>Form: Enter title, link, kind, and collection
-    Form->>Logic: Submit source details
-    Logic->>Logic: Validate title and HTTP(S) URL
-    Logic->>Store: Save updated library
-    Store-->>Form: Confirm local save
-    Form-->>Reader: Show the new source card
+flowchart TB
+    Reader[📚 Reader] --> Interface[🎨 Browser interface]
+    Interface --> Library[🧩 Library logic]
+    Library --> Validate[✅ Validate and filter sources]
+    Validate --> Store[(💾 Browser localStorage)]
+    Store --> Library
+    Library --> Interface
+    Interface --> Backup[📦 JSON export and import]
+
+    classDef person fill:#7c3aed,stroke:#c4b5fd,color:#fff,stroke-width:2px;
+    classDef ui fill:#2563eb,stroke:#93c5fd,color:#fff,stroke-width:2px;
+    classDef logic fill:#0891b2,stroke:#67e8f9,color:#fff,stroke-width:2px;
+    classDef validate fill:#059669,stroke:#6ee7b7,color:#fff,stroke-width:2px;
+    classDef data fill:#d97706,stroke:#fcd34d,color:#fff,stroke-width:2px;
+    classDef backup fill:#db2777,stroke:#f9a8d4,color:#fff,stroke-width:2px;
+    class Reader person;
+    class Interface ui;
+    class Library logic;
+    class Validate validate;
+    class Store data;
+    class Backup backup;
+    linkStyle default stroke:#94a3b8,stroke-width:2px;
 ```
 
-The app reads the existing versioned library from `localStorage` at launch, or shows a sample library on first use. Source links must use HTTP or HTTPS. Searches and filters run against the local library. Editing a note, changing reading status, or starring an item writes the updated library to browser storage. Import replaces the current library only after confirmation and validation; export downloads the versioned JSON data.
-
-## Project structure
+### 📂 Repository layout
 
 ```text
 margin/
 ├── .github/workflows/quality.yml  # Test and syntax-check workflow
-├── assets/
-│   ├── banner.gif                 # Original animated README illustration
-│   ├── badges/                    # Static, locally stored README badges
-│   └── mark.svg                   # Project mark and browser favicon
+├── assets/                        # Project mark, banner, and README badges
 ├── scripts/server.mjs             # Dependency-free local web server
 ├── src/
-│   ├── app.js                     # UI rendering and browser interactions
-│   └── library.js                 # Source model, validation, search, statistics
-├── tests/library.test.js          # Core library behavior tests
-├── .env.example                   # No environment variables currently needed
-├── .gitignore
+│   ├── app.js                      # UI rendering and browser interactions
+│   └── library.js                  # Source model, validation, search, statistics
+├── tests/library.test.js           # Core library behavior tests
+├── .env.example                    # No environment variables currently needed
 ├── CONTRIBUTING.md
 ├── index.html
 ├── LICENSE
@@ -111,9 +105,16 @@ margin/
 └── styles.css
 ```
 
-## Run locally
+---
 
-**Requirements:** Node.js 20 or newer. Margin has no npm dependencies.
+## 🚀 Getting Started
+
+### Requirements
+
+- Node.js 20 or newer
+- No npm dependencies to install
+
+### Run locally
 
 ```bash
 git clone https://github.com/m-akmal728/margin.git
@@ -121,22 +122,31 @@ cd margin
 npm run dev
 ```
 
-Open the local address printed by the server (by default, `http://127.0.0.1:4173`). To change the port, set `PORT` before running the command. You can also run `npm start`.
+Open the local address printed by the server (by default, `http://127.0.0.1:4173`). You can also run `npm start`. Set `PORT` before running the server to use a different port.
 
-## Use Margin
+### Use Margin
 
-1. Choose **Add source** and paste a title and an `http://` or `https://` link.
-2. Choose what kind of source it is and where to file it. Add a short reason to remember it, if useful.
-3. Search or filter your library; select a card to annotate it, star it, open the original, or mark it read.
+1. Select **Add source** and enter a title and an `http://` or `https://` link.
+2. Choose a source type and collection; add a short reason to return if you like.
+3. Search or filter the library. Open a source card to add a note, star it, visit the original, or mark it read.
 4. Open **Data & settings** to export or restore a backup.
 
-The first visit shows four sample sources to make the interface legible. They are not merged into an existing saved library. Clearing the library returns to an empty state.
+---
 
-### Environment variables
+## 🛡️ Privacy & Data
 
-No environment variables are required. `PORT` is an optional setting for the local development server and defaults to `4173`. There are no API keys or secrets. See [`.env.example`](.env.example).
+- Each browser profile has its own local library. Sources and notes are not uploaded or shared with other users.
+- Margin has no account, backend, analytics, tracking, external previews, or outgoing library requests.
+- Using another device starts with that device's own browser storage. To transfer your library, export a JSON backup and import it on the other device.
+- Anyone with access to the same browser profile can access its local data. Use a separate profile on shared devices.
+- Treat exported JSON backups as private. Imports are validated before replacing the current library.
+- Source links must use HTTP or HTTPS and open with `noopener noreferrer`.
 
-## Tests and checks
+See [`SECURITY.md`](SECURITY.md) for reporting a security concern. There are no API keys or secrets; `PORT` is the only optional local server setting. See [`.env.example`](.env.example).
+
+---
+
+## 🧪 Testing
 
 ```bash
 npm test
@@ -145,15 +155,13 @@ npm run check
 
 The test suite covers secure URL schemes, source creation and validation, reading and notes statistics, combined filters and sorting, and imported backup validation. `npm run check` parses the app, library, and server JavaScript. GitHub Actions runs both commands on pushes and pull requests.
 
-## Security and data
+---
 
-Margin does not upload your sources or notes. The local server serves static files on `127.0.0.1`; the browser stores the library in `localStorage`. Anyone using the same browser profile can access its data, so avoid shared profiles for sensitive material. Treat exported JSON backups as private. Imported backups are checked for a supported schema, unique IDs, and safe web URLs. Saved links open with `noopener noreferrer`. Review [`SECURITY.md`](SECURITY.md) before reporting a concern.
-
-## Roadmap
+## 🗺️ Roadmap
 
 ### Complete
 
-- Local source library, collections, annotations, starred items, and reading state
+- Local source library, collections, notes, starred items, and reading status
 - Search, type filters, sorting, responsive grid/list display, and progress summary
 - Versioned JSON backup and restore
 - Accessible dialogs, keyboard search, reduced-motion support, and empty states
@@ -161,19 +169,23 @@ Margin does not upload your sources or notes. The local server serves static fil
 
 ### Possible next steps
 
-- Browser share-target or bookmarklet for faster capture
+- Browser share target or bookmarklet for faster capture
 - Citation export in common academic formats
 - Optional encrypted backup format
 - Search within highlighted passages
 
-## Contributing
+---
 
-Small, focused contributions are welcome. Start with the steps in [`CONTRIBUTING.md`](CONTRIBUTING.md), run the test and check commands, and describe the behavior you changed in your pull request.
+## 🤝 Contributing
 
-## License
+Small, focused contributions are welcome. Read [`CONTRIBUTING.md`](CONTRIBUTING.md), run the test and check commands, and describe the behavior changed in your pull request.
+
+## 📄 License
 
 Distributed under the [MIT License](LICENSE).
 
-## Author
+---
 
-Created by [@m-akmal728](https://github.com/m-akmal728).
+<div align="center">
+  Built with care by <a href="https://github.com/m-akmal728">@m-akmal728</a>
+</div>
