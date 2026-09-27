@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f7f4">
+  <meta name="description" content="A calm, local-first reading desk for collecting sources, writing notes, and keeping research moving.">
+  <title>Margin — your research desk</title>
+  <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Main navigation">
+      <a class="brand" href="#home" aria-label="Margin home"><span class="brand-mark">m</span><span>margin<span class="brand-period">.</span></span></a>
+      <div class="sidebar-label">WORKSPACE</div>
+      <nav class="primary-nav">
+        <button class="nav-item active" data-view="all"><span class="nav-icon">▦</span>All sources<span class="nav-count" id="all-count">0</span></button>
+        <button class="nav-item" data-view="unread"><span class="nav-icon">◷</span>To read<span class="nav-count" id="unread-count">0</span></button>
+        <button class="nav-item" data-view="starred"><span class="nav-icon">✳</span>Starred</button>
+      </nav>
+      <div class="sidebar-rule"></div>
+      <div class="sidebar-label category-heading">COLLECTIONS <button id="add-collection" class="tiny-add" aria-label="Add collection">＋</button></div>
+      <nav id="collection-nav" class="collection-nav"></nav>
+      <div class="sidebar-spacer"></div>
+      <div class="privacy-card"><span class="privacy-dot"></span><div><strong>Your space, your device</strong><p>Everything stays in this browser.</p></div></div>
+      <button class="settings-link" id="open-settings"><span>⚙</span> Data & settings</button>
+      <div class="profile-row"><div class="avatar">M</div><div><strong>My workspace</strong><span>Personal library</span></div><span class="profile-more">•••</span></div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="breadcrumbs"><span>Workspace</span><span class="crumb-slash">/</span><strong id="current-crumb">All sources</strong></div>
+        <div class="top-actions"><span class="saved-status"><span class="status-dot"></span> All changes saved</span><button class="icon-button" id="help-button" aria-label="Help and shortcuts">?</button><button class="add-button" id="top-add"><span>＋</span> Add source</button></div>
+      </header>
+      <section class="content-area">
+        <div class="welcome-line"><div><div class="eyebrow" id="today-label">YOUR RESEARCH DESK</div><h1 id="page-title">All sources<span class="title-period">.</span></h1><p class="page-subtitle" id="page-subtitle">A good idea is worth keeping a margin for.</p></div><div class="date-chip"><span class="sun-icon">☼</span><span id="date-label"></span></div></div>
+        <section class="stats-row" aria-label="Library overview">
+          <div class="stat-card stat-total"><span class="stat-label">IN YOUR LIBRARY</span><div><strong id="stat-total">0</strong><span>sources</span></div><span class="stat-decoration">↗</span></div>
+          <div class="stat-card"><span class="stat-label">STILL TO READ</span><div><strong id="stat-unread">0</strong><span>on your list</span></div><span class="stat-icon unread-icon">◷</span></div>
+          <div class="stat-card"><span class="stat-label">NOTES WRITTEN</span><div><strong id="stat-notes">0</strong><span>annotations</span></div><span class="stat-icon note-icon">✎</span></div>
+          <div class="stat-card progress-card"><span class="stat-label">READING MOMENTUM</span><div class="progress-value"><strong id="stat-progress">0%</strong><span>completed</span></div><div class="progress-track"><span id="progress-fill"></span></div></div>
+        </section>
+        <div class="toolbar">
+          <div class="tabs" role="tablist"><button class="tab active" data-filter="recent">Recently added</button><button class="tab" data-filter="updated">Recently updated</button></div>
+          <div class="toolbar-right"><label class="search-box"><span class="search-icon">⌕</span><input id="search-input" type="search" placeholder="Search your library…" aria-label="Search sources"><kbd>⌘ K</kbd></label><button class="filter-button" id="filter-button"><span>☷</span> Filter <span class="filter-count" id="filter-count"></span></button><button class="view-toggle" id="view-toggle" aria-label="Switch layout" title="Switch layout">☷</button></div>
+        </div>
+        <div class="active-filters" id="active-filters" hidden></div>
+        <section class="source-grid" id="source-grid" aria-live="polite"></section>
+        <footer class="list-footer"><span id="result-count">Showing 0 sources</span><span>Made for the curious <span class="footer-spark">✳</span></span></footer>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="source-dialog" class="modal"><form id="source-form" method="dialog"><div class="modal-heading"><div><span class="eyebrow">GROW YOUR LIBRARY</span><h2>Add a source</h2></div><button type="button" class="modal-close" data-close="source-dialog" aria-label="Close">×</button></div><p class="modal-copy">Save something worth coming back to.</p><label class="field-label" for="source-title">Title <span>required</span></label><input class="field" id="source-title" name="title" maxlength="140" placeholder="The shape of a good question" required><label class="field-label" for="source-url">Link <span>required</span></label><input class="field" id="source-url" name="url" type="url" placeholder="https://…" required><div class="field-row"><div><label class="field-label" for="source-type">Kind</label><select class="field" id="source-type"><option>Article</option><option>Paper</option><option>Book</option><option>Video</option><option>Podcast</option><option>Other</option></select></div><div><label class="field-label" for="source-collection">Collection</label><select class="field" id="source-collection"></select></div></div><label class="field-label" for="source-description">Why save this? <span>optional</span></label><textarea class="field textarea" id="source-description" maxlength="280" placeholder="A thought, question, or reminder…"></textarea><div class="modal-actions"><button type="button" class="quiet-button" data-close="source-dialog">Cancel</button><button class="add-button" type="submit">Save source <span>↗</span></button></div></form></dialog>
+
+  <dialog id="detail-dialog" class="modal detail-modal"><div id="detail-content"></div></dialog>
+  <dialog id="settings-dialog" class="modal settings-modal"><div class="modal-heading"><div><span class="eyebrow">YOUR LIBRARY</span><h2>Data & settings</h2></div><button type="button" class="modal-close" data-close="settings-dialog" aria-label="Close">×</button></div><p class="modal-copy">Your library is saved on this device. Take it with you whenever you like.</p><div class="data-actions"><button class="data-action" id="export-data"><span class="data-action-icon">↓</span><span><strong>Export library</strong><small>Download your sources and notes as JSON.</small></span><span>↗</span></button><button class="data-action" id="import-trigger"><span class="data-action-icon">↑</span><span><strong>Import library</strong><small>Restore a Margin JSON backup.</small></span><span>↗</span><input id="import-file" type="file" accept="application/json,.json" hidden></button></div><div class="settings-note"><span>✳</span><p><strong>Local by design.</strong> Margin doesn't send your library to a server. Your browser's storage is the only copy unless you export a backup.</p></div><button class="danger-button" id="clear-library">Clear library…</button><button type="button" class="quiet-button settings-done" data-close="settings-dialog">Done</button></dialog>
+  <dialog id="filter-dialog" class="popover"><div class="popover-head"><strong>Filter by kind</strong><button data-close="filter-dialog" aria-label="Close">×</button></div><div id="kind-filters" class="check-list"></div><button class="clear-filters" id="clear-filters">Clear filters</button></dialog>
+  <div id="toast" class="toast" role="status"></div>
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

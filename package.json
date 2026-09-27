@@ -1,0 +1,15 @@
+{
+  "name": "margin-research-desk",
+  "version": "1.0.0",
+  "private": false,
+  "type": "module",
+  "description": "A local-first reading desk for collecting sources, writing notes, and keeping research moving.",
+  "scripts": {
+    "dev": "node scripts/server.mjs",
+    "start": "node scripts/server.mjs",
+    "test": "node --test",
+    "check": "node --check src/app.js && node --check src/library.js && node --check scripts/server.mjs"
+  },
+  "engines": { "node": ">=20" },
+  "license": "MIT"
+}
